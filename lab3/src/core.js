@@ -1,3 +1,15 @@
+function assertNonNegativeInteger(n, name = 'n') {
+  if (typeof n !== 'number' || Number.isNaN(n)) {
+    throw new TypeError(`${name} must be a number`);
+  }
+  if (!Number.isFinite(n) || !Number.isInteger(n)) {
+    throw new RangeError(`${name} must be an integer`);
+  }
+  if (n < 0) {
+    throw new RangeError(`${name} must be >= 0`);
+  }
+}
+
 /**
  * Напишите функцию, которая проверяет, является ли число целым используя побитовые операторы
  * @param {*} n
@@ -29,7 +41,8 @@ function sumTo(n) {
  * @param {*} n
  */
 function recSumTo(n) {
-  return n === 1 ? 1 : n + recSumTo(n - 1);
+  assertNonNegativeInteger(n, 'n');
+  return n === 0 ? 0 : n + recSumTo(n - 1);
 }
 
 /**
@@ -37,6 +50,8 @@ function recSumTo(n) {
  * @param {*} n
  */
 function factorial(n) {
+  assertNonNegativeInteger(n, 'n');
+  
   return n === 1 ? 1 : n * factorial(n - 1);
 }
 
@@ -45,6 +60,9 @@ function factorial(n) {
  * @param {*} n
  */
 function isBinary(n) {
+  if (typeof n !== 'number' || !Number.isFinite(n) || !Number.isInteger(n)) {
+    return false;
+  }
   if (n <= 0) return false;
   return (n & (n - 1)) === 0;
 }
@@ -54,7 +72,9 @@ function isBinary(n) {
  * @param {*} n
  */
 function fibonacci(n) {
-  if (n <= 1) return n;
+  assertNonNegativeInteger(n, 'n');
+  
+  if (n === 1) return n;
   let a = 0, b = 1;
   for (let i = 2; i <= n; i++) {
     const temp = a + b;
@@ -76,9 +96,18 @@ function fibonacci(n) {
  * console.log(sumFn(3)) - 18
  */
 function getOperationFn(initialValue, operatorFn) {
+  if (operatorFn !== undefined && typeof operatorFn !== 'function') {
+    throw new TypeError('operatorFn must be a function');
+  }
+
+  if (!operatorFn) {
+    return function () {
+      return initialValue;
+    };
+  }
+
   let storedValue = initialValue;
   return function (newValue) {
-    if (!operatorFn) return storedValue;
     storedValue = operatorFn(storedValue, newValue);
     return storedValue;
   };
@@ -101,6 +130,13 @@ function getOperationFn(initialValue, operatorFn) {
  * console.log(generator()); // 9
  */
 function sequence(start = 0, step = 1) {
+  if (typeof start !== 'number' || !Number.isFinite(start)) {
+    throw new TypeError('start must be a finite number');
+  }
+  if (typeof step !== 'number' || !Number.isFinite(step)) {
+    throw new TypeError('step must be a finite number');
+  }
+
   let current = start;
   return function () {
     const value = current;
