@@ -400,14 +400,15 @@ body {
 }
 
 /* Модификатор для страницы отелей */
-.placement__list_grid .placement__item:nth-child(7),
-.placement__list_grid .placement__item:nth-child(8) {
-  margin-bottom: 24px;
+.placement__list_grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
 }
 
-.placement__list_grid .placement__item:nth-child(13),
-.placement__list_grid .placement__item:nth-child(14) {
-  margin-bottom: 0;
+.placement__list_grid .placement__item {
+  width: 100%;
+  margin: 0;
 }
 
 .placement__list_grid .placement__item:last-child {
